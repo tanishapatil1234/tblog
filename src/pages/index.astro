@@ -1,0 +1,21 @@
+---
+import Banner from '../components/Banner.astro'
+import ListCategories from '../components/ListCategories.astro'
+import ListPosts from '../components/ListPosts.astro'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { getCategories } from '../libs/helpers'
+import { getCollection } from 'astro:content'
+
+const posts = (await getCollection('blog'))
+	.slice(0, 6)
+	.sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf())
+
+const categories = getCategories(posts)
+---
+
+<BaseLayout>
+	<Banner />
+	<h1 class="text-4xl font-semibold">Latest articles</h1>
+	<ListCategories categories={categories} />
+	<ListPosts posts={posts} />
+</BaseLayout>
